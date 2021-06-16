@@ -2,7 +2,8 @@ const router = require('express').Router();
 const passport = require('passport');
 const genPassword = require('../passwordUtils').genPassword;
 const {User} = require('../database');
-const path = require('path')
+const path = require('path');
+const isAuth = require('../authMiddleware').isAuth;
 
 router.get('/', (req, res) => {
     res.statusCode = 200;
@@ -40,6 +41,11 @@ router.get('/logout', (req, res) => {
     req.logout();
     req.session.destroy();
     res.redirect('/');
+})
+
+router.get('/is_logged',(req, res) => {
+    const isAuth = req.isAuthenticated();
+    res.send(isAuth);
 })
 
 module.exports = router;
