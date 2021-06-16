@@ -1,0 +1,109 @@
+html , body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background:azure; 
+}
+
+textarea {
+    resize: none;
+ }
+
+
+.post {
+    border: 1px solid rgba(0,0,0,0.3);
+    background-color: rgba(255,255,255,0.5);
+    width: 50%;
+    margin: 20px auto;
+    padding: 10px;
+    box-sizing: border-box;
+    height: auto;
+}
+
+.posts {
+    margin-top: 100px;
+}
+
+form.post {
+    text-align:start;
+}
+
+input {
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+h2 {
+    margin: 0px;
+    padding-bottom: 20px;
+}
+
+.form-control {
+    margin: 10px 0px;
+    display: grid;
+    grid-template-columns: 100px 250px;
+}
+
+P {
+    word-wrap: break-word;
+}
+
+.header-btn {
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 15px;
+    background-color:rgba(255,255,255,0.5);
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+header {
+    padding: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 auto;
+    width: 800px;
+    
+}
+
+.header-wrapper {
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background: cadetblue;
+}
+
+.login:hover {
+    background-color:rgba(0,0,0,0.3);
+}
+
+.modal-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-Color:rgba(0,0,0,0.5);
+}
+
+
+.modal {
+    display: block;
+    opacity: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: black;
+    transform: translate(-50%,-50%);
+    border: 1px solid rgb(123,200,175);
+    background: rgb(255,255,255);
+    border-radius: 5px;
+    padding: 20px;
+    width: 500px;
+}
