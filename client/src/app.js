@@ -3,64 +3,76 @@ import { render } from 'react-dom';
 import {useState} from 'react'
 import _ from './style.css'
 import Header from './header'
+import axios from 'axios'
+import {CreatePost} from './Forms'
 window.React = React
 
 
-const Post = ({title,author,date,text}) => {
-    console.log({title,author,date,text});
+const Post = ({title,author,date,text,id}) => {
     return (<div className="post">
         <h3>{title}</h3>
         <p>{author}</p>
         <p>{text}</p>
         <p>Posted on: {date}</p>
+        <button onClick={() => {
+            console.log(id);
+            axios.post('/delete_post/' + id);
+        }}>delete</button>
     </div>)
 }
 
-const CreatePost = ({addPost}) => {
-
-    const [author,setAuthor] = useState('')
-    const [text,setText] = useState('')
-    const [title,setTitle] = useState('')
-
-    return (
-        <form className="post" onSubmit={(e) => addPost(e,title,text,author)}>
-            <h2>Создать пост</h2>
-            <div className="form-control">
-                <label for="title">Название</label>
-                <input type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
-            </div>
-            <div className="form-control">
-                <label for="author">Автор</label>
-                <input type="text" id="author" value={author} onChange={(e) => setAuthor(e.target.value)}></input>
-            </div>
-            <div className="form-control">
-                <label for="text">Текст</label>
-                <textarea type="text" id="text" rows="10" value={text} onChange={(e) => setText(e.target.value)} />
-            </div>
-            <button type="submit">Постнуть</button>
-        </form>
-    )
+const isLoggedIn = async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/is_logged');
+        return response.data;
+    } catch (err) {
+        return false;
+    }
 }
 
-
+const getPosts = async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/posts');
+        return response.data;
+    } catch (err) {
+        return err;
+    }
+}
 
 
 const App = () => {
     const [posts,setPosts] = useState([])
-    const addPost = (e,title,text,author) => {
-        e.preventDefault();
-        const newPosts = [...posts, {title,text,author}];
-        setPosts(newPosts)
-    }
+    const [isLogged,setIsLogged] = useState(false);
+
+    useEffect(() => {
+        async function getLoggedIn() {
+            const getLogin = await isLoggedIn();
+            setIsLogged(getLogin);
+
+            if (getLogin) {
+                getPosts()
+                .then(postsOfUser => {
+                    console.log(postsOfUser);
+                    if (!postsOfUser.err) {
+                        setPosts(postsOfUser.posts);
+                    }
+                })
+            }
+        };
+        getLoggedIn();
+    },[]);
+
+    
+
     return (
         <>
-            <Header />
-            <div class="posts">
-                <CreatePost addPost={addPost}/>
+            <Header isLogged={isLogged}/>
+            {isLogged && <div class="posts">
+                <CreatePost />
                 {posts.map(post => {
-                    return <Post title={post.title} author={post.author} date={new Date().toDateString()} text={post.text}/>
+                    return <Post title={post.title} date={post.date.slice(0,10)} text={post.text} id={post.id}/>
                 })}
-            </div>
+            </div>}
         </>
     )
 }

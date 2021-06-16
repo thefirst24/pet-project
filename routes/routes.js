@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const passport = require('passport');
 const genPassword = require('../passwordUtils').genPassword;
-const {User} = require('../database');
+const {User,Post} = require('../database');
 const path = require('path');
 const isAuth = require('../authMiddleware').isAuth;
 
@@ -46,6 +46,39 @@ router.get('/logout', (req, res) => {
 router.get('/is_logged',(req, res) => {
     const isAuth = req.isAuthenticated();
     res.send(isAuth);
+})
+
+router.get('/posts',isAuth,(req, res) => {
+    Post.find({author:req.user._id})
+    .then(posts => {
+        posts = posts.map(post => {return {title:post.title,text:post.text,date:post.date,id:post._id }})
+        res.send({err:null,posts});
+    })
+    .catch(err => {
+        console.log(err);
+        res.send({err:err})
+    });
+})
+
+router.post('/delete_post/:id',isAuth,(req,res) => {
+    Post.deleteOne({_id:req.params.id},(err) => {
+        if (err) console.log(err);
+        res.statusCode = 200;
+        res.redirect('/');
+    });
+    
+})
+    
+router.post('/add_post',isAuth,(req, res) => {
+    const {title,text} = req.body;
+    const newPost = new Post({author:req.user._id,title,text,date:Date.now()})
+    newPost.save()
+    .then(post => {
+        console.log(post);
+        res.statusCode = 200;
+        res.redirect('/');
+    })
+    .catch(err => console.log(err));
 })
 
 module.exports = router;

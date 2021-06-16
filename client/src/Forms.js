@@ -46,3 +46,24 @@ export const RegisterForm = () => {
         </form>
     )
 }
+
+export const CreatePost = ({addPost}) => {
+
+    const [text,setText] = useState('')
+    const [title,setTitle] = useState('')
+
+    return (
+        <form method="post" action="/add_post" className="post">
+            <h2>Создать пост</h2>
+            <div className="form-control">
+                <label for="title">Название</label>
+                <input name="title" type="text" id="title" value={title} onChange={(e) => setTitle(e.target.value)}></input>
+            </div>
+            <div className="form-control">
+                <label for="text">Текст</label>
+                <textarea name="text" type="text" id="text" rows="10" value={text} onChange={(e) => setText(e.target.value)} />
+            </div>
+            <button type="submit">Постнуть</button>
+        </form>
+    )
+}

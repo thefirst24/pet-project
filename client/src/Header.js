@@ -2,7 +2,6 @@ import {LoginForm,RegisterForm} from './Forms'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
 
-
 const Modal = (props) => {
     return (
         <div className="modal-container" >
@@ -11,22 +10,10 @@ const Modal = (props) => {
     )
 }
 
-const isLoggedIn = () => {
-    return axios.get('http://localhost:3000/is_logged')
-    .then(response => {
-        return response.data;
-    })
-    .catch(err => {
-        return false;
-    })
-}
 
-
-
-const Header = () => {
+const Header = ({isLogged}) => {
     const [isLoginModalOpen,setIsLoginModalOpen] = useState(false);
     const [isRegisterModalOpen,setRegisterIsModalOpen] = useState(false);
-    const [isLogged,setIsLogged] = useState(false);
     document.body.style.overflow = isLoginModalOpen ||  isRegisterModalOpen ? 'hidden' : 'visible';
     useEffect(() => {
         if (isLoginModalOpen || isRegisterModalOpen) {
@@ -41,13 +28,6 @@ const Header = () => {
             });
         }
     },[isLoginModalOpen,isRegisterModalOpen]);
-    useEffect(() => {
-        async function getLoggedIn() {
-            const getLogin = await isLoggedIn();
-            setIsLogged(getLogin);
-        };
-        getLoggedIn();
-    },[isLogged]);
     return (
         <>
         <div className="header-wrapper">
@@ -58,7 +38,6 @@ const Header = () => {
                     axios.get("http://localhost:3000/logout").then(response => {
                          window.location.reload();
                     })
-                    console.log("clcked");
                 }}>Logout</a>}
             </header>
         </div>

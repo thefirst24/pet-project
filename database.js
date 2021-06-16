@@ -13,8 +13,26 @@ const UserSchema = new mongoose.Schema({
     admin:Boolean
 });
 
-const User = connection.model('Users',UserSchema);
+const PostSchema = new mongoose.Schema({
+    author:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
+    title:{
+        type: String,
+        required: true,
+    },
+    text:{
+        type: String,
+        required: true
+    },
+    date: { type: Date, default: Date.now }
+})
 
+const User = connection.model('User',UserSchema);
+const Post = connection.model('Post',PostSchema);
+
+module.exports.Post = Post;
 module.exports.User = User;
 module.exports.db_url = db_url;
 module.exports.connection = connection;
