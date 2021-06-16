@@ -56,10 +56,10 @@ const App = () => {
         <>
             <Header />
             <div class="posts">
+                <CreatePost addPost={addPost}/>
                 {posts.map(post => {
                     return <Post title={post.title} author={post.author} date={new Date().toDateString()} text={post.text}/>
                 })}
-                <CreatePost addPost={addPost}/>
             </div>
         </>
     )

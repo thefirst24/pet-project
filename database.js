@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
 const db_url = 'mongodb://localhost:27017/twitter';
 
-const connection = mongoose.createConnection(db_url);
+const connection = mongoose.createConnection(db_url,{
+    useNewUrlParser:true,
+    useUnifiedTopology: true
+}); 
 
 const UserSchema = new mongoose.Schema({
     username:String,
-    password:String
+    hash:String,
+    salt:String 
 });
 
-const Users = connection.model('Users',UserSchema);
+const User = connection.model('Users',UserSchema);
 
-const createUser = (username, password) => {
-    Users.create({
-        username,
-        password
-    })
-}
-module.exports.Users = Users;
-module.exports.createUser = createUser;
+module.exports.User = User;
 module.exports.db_url = db_url;
+module.exports.connection = connection;
